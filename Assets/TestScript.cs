@@ -10,7 +10,7 @@ public class TestScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        LERPscript.LERP(p0, p1, 0.5f);
+        LERPscript.Instance.LERP(p0, p1, 0.5f);
     }
 
     // Update is called once per frame
