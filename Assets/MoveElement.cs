@@ -4,35 +4,35 @@ using UnityEngine;
 
 public class MoveElement : MonoBehaviour
 {
-    public Vector3 endPos = new Vector3(0.0f, 0.0f, 0.0f);
+    public Transform endPos;
     public float duration;
 
     private Vector3 elementPos;
-    private float t = 0;
-    private bool animate = false;
+    private float t = 0.0f;
+    private bool lerpEnabled = false;
 
     public void LERP()
     {
-        animate = true;
-        GetComponent<Transform>().position = Vector3.Lerp(elementPos, endPos, t);
+        lerpEnabled = true;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        Vector3 elementPos = GetComponent<Transform>().position;
+        elementPos = GetComponent<Transform>().position;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (animate)
+        if (lerpEnabled)
         {
-            t += duration / Time.deltaTime;
+            t += Time.deltaTime / duration;
+            GetComponent<Transform>().position = Vector3.Lerp(elementPos, endPos.position, t);
             if (t > duration)
             {
                 t = 0;
-                animate = false;
+                lerpEnabled = false;
             }
         }
     }
