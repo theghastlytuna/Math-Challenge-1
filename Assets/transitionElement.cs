@@ -9,13 +9,31 @@ public class transitionElement : MonoBehaviour
 
     private Vector3 elementPos;
     private float t = 0.0f;
-    private bool lerpEnabled = false;
+    private bool lerpOut = false;
+    private bool lerpIn = false;
 
 
-    public void transition()
+    public void TransitionOut()
     {
-        lerpEnabled = true;
+        lerpOut = true;
     }
+
+    public void TransitionIn()
+    {
+        EnableElement();
+        lerpIn = true;
+    }
+
+    private void DisableElement()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    private void EnableElement()
+    {
+        this.gameObject.SetActive(true);
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -26,15 +44,25 @@ public class transitionElement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (lerpEnabled)
+        if (lerpOut && t < 1)
         {
             t += Time.deltaTime / duration;
             GetComponent<Transform>().position = Vector3.Lerp(elementPos, transitionTarget.position, t);
             if (t >= duration)
             {
                 t = 0;
-                lerpEnabled = false;
-                this.gameObject.SetActive(false);
+                lerpOut = false;
+                DisableElement();
+            }
+        }
+        else if (lerpIn)
+        {
+            t += Time.deltaTime / duration;
+            GetComponent<Transform>().position = Vector3.Lerp(transitionTarget.position, elementPos, t);
+            if (t >= duration)
+            {
+                t = 0;
+                lerpIn = false;
             }
         }
     }
